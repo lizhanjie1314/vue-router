@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>vue-router2.0</title>
+    <link href="css/bootstrap.min.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+<div id="box">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-2 col-xs-offset-2">
+                <div class="list-group">
+                    <!-- vue2.0后，路由链接标签由<a v-link="'/about'">About</a>改为<router-link to="/about">About</router-link>-->
+                    <!-- 路由关键是配置好路径，路径配置好了，就可以默认显示一些东西，自己掉到这个坑里了-->
+                    <router-link to="/home/first" class="list-group-item">主页</router-link>
+                    <router-link to='/about/one' class="list-group-item">关于</router-link>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="panel">
+                    <div class="panel-body">
+                        <router-view></router-view>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<template id="home">
+    <div>
+        <div>
+            <h1>{{str}}</h1>
+            <p>{{msg}}</p>
+        </div>
+        <div>
+            <ul class="nav nav-tabs">
+                <li><router-link to="/home/first">first</router-link></li>
+                <li><router-link to="/home/second">second</router-link></li>
+            </ul>
+            <router-view></router-view>
+        </div>
+    </div>
+</template>
+<template id="first">
+    <ul>
+        <li>first01</li>
+        <li>first02</li>
+        <li>first03</li>
+    </ul>
+</template>
+<template id="second">
+    <ul>
+        <li>second01</li>
+        <li>second02</li>
+        <li>second03</li>
+    </ul>
+</template>
+<template id="about">
+    <div>
+        <div>
+            <h1>{{str}}</h1>
+            <p>{{msg}}</p>
+        </div>
+        <div>
+            <ul class="nav nav-tabs">
+                <li><router-link to="/about/one">one</router-link></li>
+                <li><router-link to="/about/two">two</router-link></li>
+            </ul>
+            <router-view></router-view>
+        </div>
+    </div>
+</template>
+<template id="one">
+    <ul>
+        <li>one01</li>
+        <li>one02</li>
+        <li>one03</li>
+    </ul>
+</template>
+<template id="two">
+    <ul>
+        <li>two01</li>
+        <li>two02</li>
+        <li>two03</li>
+    </ul>
+</template>
+<script src="js/vue.js"></script>
+<script src="js/vue-router.js"></script>
+<script>
+    //组件
+    var Home=Vue.extend({
+        template:'#home',
+        data:function(){
+            return{
+                msg:'hello,vue-router',
+                str:'home'
+            }
+        }
+    });
+    var First=Vue.extend({
+        template:'#first'
+    });
+    var Second=Vue.extend({
+        template:'#second'
+    });
+    var About=Vue.extend({
+        template:'#about',
+        data:function(){
+            return{
+                msg:'hello,about',
+                str:'about'
+            }
+        }
+    });
+    var One=Vue.extend({
+        template:'#one'
+    });
+    var Two=Vue.extend({
+        template:'#two'
+    });
+    //生产路由并配置路由重定向，//vue2.0后subRoutes被children替换，这样可以写嵌套路由了
+    //要注意，以 / 开头的嵌套路径会被当作根路径。 这让你充分的使用嵌套组件而无须设置嵌套的路径
+    var router=new VueRouter({
+        routes:[
+            {path:'/home',component:Home,children:[{path:'first',component:First},{path:'second',component:Second}]},
+            {path:'/about',component:About,children:[{path:'one',component:One},{path:'two',component:Two}]},
+                //重定向
+            {path:'*',redirect:'/home/second'}
+        ]
+    }
+    );
+    //挂载到vue上
+    new Vue({
+        el:"#box",
+        router:router
+    })
+</script>
+</body>
+</html>
