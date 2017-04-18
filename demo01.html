@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>vue-router2.0</title>
+    <link href="css/bootstrap.min.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+<div id="box">
+    <div class="row">
+        <div class="col-xs-2 col-xs-offset-2">
+            <div class="list-group">
+                <!-- vue2.0后，路由链接标签由<a v-link="'/about'">About</a>改为<router-link to="/about">About</router-link>-->
+                <router-link to="/home" class="list-group-item">主页</router-link>
+                <router-link to='/about' class="list-group-item">关于</router-link>
+            </div>
+        </div>
+        <div class="col-xs-6">
+            <div class="panel">
+                <div class="panel-body">
+                    <router-view></router-view>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="js/vue.js"></script>
+<script src="js/vue-router.js"></script>
+<script>
+    //组件
+    var Home=Vue.extend({
+        template:'<div><h1>home</h1><p>{{msg}}</p></div>',
+        data:function(){
+            return{
+                msg:'hello,vue-router'
+            }
+        }
+    });
+    var About=Vue.extend({
+        template:'<div><h1>about</h1><p>This is about vue-router</p></div>'
+    });
+    //生产路由并配置路由重定向
+    var router=new VueRouter({
+        routes:[
+            {path:'/home',component:Home},
+            {path:'/about',component:About},
+                //重定向
+            {path:'*',redirect:'/home'}
+        ]
+    }
+    );
+    //挂载到vue上
+    new Vue({
+        el:"#box",
+        router:router
+    })
+</script>
+</body>
+</html>
